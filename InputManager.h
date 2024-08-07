@@ -1,7 +1,4 @@
-// InputManager.h
-
-#ifndef INPUTMANAGER_H
-#define INPUTMANAGER_H
+#pragma once
 
 #include <GLFW/glfw3.h>
 
@@ -16,4 +13,4 @@ extern float cubeRotationX, cubeRotationY;
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 void cursorPositionCallback(GLFWwindow* window, double xpos, double ypos);
 
-#endif // INPUTMANAGER_H
+

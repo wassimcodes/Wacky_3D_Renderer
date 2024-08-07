@@ -133,7 +133,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Libraries\include\Shader\shader_s.h" />
     <ClInclude Include="Skybox.h" />
