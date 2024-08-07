@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
 // Shaders-related header files
 #include "Shader/shader_s.h"
 #define STB_IMAGE_IMPLEMENTATION
@@ -16,7 +17,6 @@
 #include "Skybox.h"
 
 int main() {
-
     // dimensions
     int wWidth = 1280;
     int wHeight = 720;
@@ -25,9 +25,9 @@ int main() {
     GLFWwindow* window = WindowManager::createWindow(wWidth, wHeight, "Wacky 3D Software");
 
     // Set GLFW callbacks
-    //glfwSetFramebufferSizeCallback(window, WindowManager::framebufferSizeCallback);
-    glfwSetMouseButtonCallback(window, mouseButtonCallback);
-    glfwSetCursorPosCallback(window, cursorPositionCallback);
+    glfwSetFramebufferSizeCallback(window, WindowManager::framebufferSizeCallback);
+    glfwSetMouseButtonCallback(window, mouseButtonCallback); // Use InputManager's callback
+    glfwSetCursorPosCallback(window, cursorPositionCallback); // Use InputManager's callback
 
     // Enable depth test
     glEnable(GL_DEPTH_TEST);
@@ -70,14 +70,6 @@ int main() {
          0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
          0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 
-         // Bottom face
-         -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-          0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-          0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-          0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
          // Top face
          -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
           0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
@@ -85,6 +77,14 @@ int main() {
           0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
          -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
          -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+
+         // Bottom face
+         -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+          0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+          0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+          0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
     };
 
     unsigned int VBO, VAO;
@@ -107,12 +107,10 @@ int main() {
     unsigned int texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    // set the texture wrapping/filtering options (on the currently bound texture object)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // load and generate the texture
     int width, height, nrChannels;
     unsigned char* data = stbi_load("C:/Users/woule/Documents/c++/Wacky_3D_Renderer/Resources/brickwall.jpg", &width, &height, &nrChannels, 0);
     if (data) {
@@ -144,45 +142,41 @@ int main() {
     Skybox skybox(faces);
 
     while (!glfwWindowShouldClose(window)) {
-
-
-        // render
+   
+        // Clear the screen
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // bind Texture
-        glBindTexture(GL_TEXTURE_2D, texture);
-
-        // activate shader
+        // Activate shader
         ourShader.use();
 
-        // create transformations
-        // Set model matrix for transformations
+        // Create transformations
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::rotate(model, glm::radians(pitch), glm::vec3(-3.0f, 0.0f, 0.0f));
-        model = glm::rotate(model, glm::radians(yaw), glm::vec3(0.0f, 3, 0.0f));
+        model = glm::rotate(model, glm::radians(cubeRotationX), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(cubeRotationY), glm::vec3(0.0f, 1.0f, 0.0f));
         ourShader.setMat4("model", model);
 
-        // render container
+        // Render cube
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        // draw skybox
-        glm::mat4 view = glm::mat4(1.0f);
-        glm::mat4 projection = glm::mat4(1.0f);
-        // Update the view matrix and projection matrix here based on your camera's setup
+        // Draw skybox
+        glm::vec3 cameraPos = glm::vec3(3.0f * sin(glm::radians(yaw)), 3.0f * sin(glm::radians(pitch)), 3.0f * cos(glm::radians(yaw)));
+        glm::mat4 view = glm::lookAt(cameraPos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        ourShader.setMat4("view", view);
+        ourShader.setMat4("projection", projection);
+
         skybox.render(view, projection);
 
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    // optional: de-allocate all resources once they've outlived their purpose:
+    // Optional: De-allocate all resources once they've outlived their purpose
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
 
-    // glfw: terminate, clearing all previously allocated GLFW resources.
+    // GLFW: terminate, clearing all previously allocated GLFW resources
     glfwTerminate();
     return 0;
 }
