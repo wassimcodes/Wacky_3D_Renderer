@@ -27,6 +27,12 @@
     <ClInclude Include="InputManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -41,12 +47,24 @@
     <ClCompile Include="InputManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="FragmentShader.frag">
       <Filter>Shader_Files</Filter>
     </None>
     <None Include="VertexShader.vert">
+      <Filter>Shader_Files</Filter>
+    </None>
+    <None Include="Skybox.frag">
+      <Filter>Shader_Files</Filter>
+    </None>
+    <None Include="Skybox.vert">
       <Filter>Shader_Files</Filter>
     </None>
   </ItemGroup>
