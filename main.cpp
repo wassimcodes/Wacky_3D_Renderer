@@ -26,8 +26,8 @@ int main() {
 
     // Set GLFW callbacks
     glfwSetFramebufferSizeCallback(window, WindowManager::framebufferSizeCallback);
-    glfwSetMouseButtonCallback(window, mouseButtonCallback); // Use InputManager's callback
-    glfwSetCursorPosCallback(window, cursorPositionCallback); // Use InputManager's callback
+    glfwSetMouseButtonCallback(window, mouseButtonCallback); 
+    glfwSetCursorPosCallback(window, cursorPositionCallback); 
 
     // Enable depth test
     glEnable(GL_DEPTH_TEST);
@@ -37,7 +37,6 @@ int main() {
 
     // Cube Vertices with Triangles
     float vertices[] = {
-        // Positions          // Texture Coords
         // Front face
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
          0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
@@ -113,10 +112,10 @@ int main() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     int width, height, nrChannels;
     unsigned char* data = stbi_load("C:/Users/woule/Documents/c++/Wacky_3D_Renderer/Resources/metal.jpg", &width, &height, &nrChannels, 0);
-    if (data) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
+    
+     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+     glGenerateMipmap(GL_TEXTURE_2D);
+    
     ourShader.use();
     ourShader.setInt("texture1", 0);
 
@@ -172,11 +171,9 @@ int main() {
         glfwPollEvents();
     }
 
-    // Optional: De-allocate all resources once they've outlived their purpose
+    // clean and terminate
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-
-    // GLFW: terminate, clearing all previously allocated GLFW resources
     glfwTerminate();
     return 0;
 }

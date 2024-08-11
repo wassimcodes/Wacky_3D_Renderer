@@ -7,7 +7,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Shader/shader_s.h"
-//#include "stb/stb_image.h"
 
 class Skybox {
 public:

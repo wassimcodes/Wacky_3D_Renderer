@@ -2,7 +2,6 @@
 
 #include <GLFW/glfw3.h>
 
-// Global variables for mouse input
 extern bool leftMouseButtonPressed;
 extern bool middleMouseButtonPressed;
 extern double lastMouseX, lastMouseY;

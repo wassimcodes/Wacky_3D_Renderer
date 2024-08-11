@@ -1,6 +1,5 @@
 #include "InputManager.h"
 
-// Global variables for mouse input
 bool leftMouseButtonPressed = false;
 bool middleMouseButtonPressed = false;
 double lastMouseY = 0.0, lastMouseX = 0.0;
@@ -32,9 +31,9 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
 void cursorPositionCallback(GLFWwindow* window, double ypos, double xpos) {
     if (leftMouseButtonPressed) {
         double yOffset = ypos - lastMouseY;
-        double xOffset = xpos-lastMouseX ; // Reversed since y-coordinates go from bottom to top
+        double xOffset = xpos-lastMouseX ; 
 
-        const float rotationSensitivity = 0.6f;
+        const float rotationSensitivity = 0.1f;
         cubeRotationX += xOffset * rotationSensitivity;
         cubeRotationY += yOffset * rotationSensitivity;
 
